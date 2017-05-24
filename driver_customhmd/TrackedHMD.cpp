@@ -296,6 +296,7 @@ CTrackedHMD::CTrackedHMD(std::string displayName, CServerDriver *pServer) : CTra
 			//may add NVIDIA detection and auto-whitelist later
 			//m_HMDData.IsConnected = IsD2DConnected(EdidVendorID);
       DriverLog("Setting Steam Direct");
+      m_HMDData.FakePackDetected = false;
       m_HMDData.IsConnected = true;
 		}
 	}
