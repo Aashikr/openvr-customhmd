@@ -61,7 +61,7 @@ CTrackedHMD::CTrackedHMD(std::string displayName, CServerDriver *pServer) : CTra
 	HasCamera = false;
 	ReportsTimeSinceVSync = false;
 	SecondsFromVsyncToPhotons = 0.0f;
-	DisplayFrequency = 60.0f;
+	DisplayFrequency = 90.0f;
 	UserIpdMeters = 0.05f;
 	CurrentUniverseId = 2;
 	PreviousUniverseId = 0;
@@ -74,9 +74,9 @@ CTrackedHMD::CTrackedHMD(std::string displayName, CServerDriver *pServer) : CTra
 	DisplayMCImageRight = "";
 	DisplayGCBlackClamp = 0.0f;
 	EdidVendorID = m_pSettings->GetInt32("driver_customhmd", "edid_vid", &error);
-	if (error != VRSettingsError_None) EdidVendorID = 0xD94D; //hardcoded for sony hmz-t2 if not set
+	if (error != VRSettingsError_None) EdidVendorID = 0xD222; //hardcoded for sony hmz-t2 if not set
 	EdidProductID = m_pSettings->GetInt32("driver_customhmd", "edid_pid", &error);
-	if (error != VRSettingsError_None) EdidProductID = 0xD602;
+	if (error != VRSettingsError_None) EdidProductID = 0xAA01;
 	CameraToHeadTransform = HmdMatrix34_t();
 	Quaternion::HmdMatrix_SetIdentity(&CameraToHeadTransform);
 	DisplayGCType = 0;
@@ -114,10 +114,10 @@ CTrackedHMD::CTrackedHMD(std::string displayName, CServerDriver *pServer) : CTra
 
 
 	//initial setup for framepacked 128x720 3d signal, detection will be done later
-	m_HMDData.ScreenWidth = 1280;
-	m_HMDData.ScreenHeight = 1470;
+	m_HMDData.ScreenWidth = 2160;
+	m_HMDData.ScreenHeight = 1200;
 	m_HMDData.AspectRatio = ((float)(m_HMDData.ScreenHeight - 30) / 2.0f) / (float)m_HMDData.ScreenWidth;
-	m_HMDData.Frequency = 60;
+	m_HMDData.Frequency = 90;
 	m_HMDData.IsConnected = false;
 	m_HMDData.FakePackDetected = true;
 	m_HMDData.SuperSample = 1.0f;
@@ -294,7 +294,9 @@ CTrackedHMD::CTrackedHMD(std::string displayName, CServerDriver *pServer) : CTra
 		{
 			//check if monitor is connected (AMD card liquidVR non documented rev-engineered check)				
 			//may add NVIDIA detection and auto-whitelist later
-			m_HMDData.IsConnected = IsD2DConnected(EdidVendorID);
+			//m_HMDData.IsConnected = IsD2DConnected(EdidVendorID);
+      DriverLog("Setting Steam Direct");
+      m_HMDData.IsConnected = true;
 		}
 	}
 
@@ -391,7 +393,7 @@ bool CTrackedHMD::IsConnected()
 			m_HMDData.IsConnected)  //m_HMDData.IsConnected is always set for virtual modes
 			return true;
 	}
-	return false;
+	return true;
 }
 
 CTrackedHMD::~CTrackedHMD()
